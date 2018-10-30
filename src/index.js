@@ -6,16 +6,6 @@ import AppComponent from 'flow-app-component';
 import './style.css';
 
 class TextComponent extends AppComponent {
-  static properties = {
-    iconUrl: '/assets/images/text-component.png',
-    name: 'Text',
-    type: 'ui-component',
-    componentType: 'text',
-    category: 'Views',
-    parent: null,
-    allowsChildren: false
-  };
-
   constructor() {
     super();
     const newState = {
@@ -73,8 +63,13 @@ class TextComponent extends AppComponent {
           ],
         },
       ],
-
-      ...TextComponent.properties
+      iconUrl: '/assets/images/text-component.png',
+      name: 'Text',
+      type: 'ui-component',
+      componentType: 'text',
+      category: 'Views',
+      parent: null,
+      allowsChildren: false,
     };
 
     this.state = Object.assign(this.state, newState); // merge two states together, and dont lose any parent state properties.
