@@ -80,8 +80,24 @@ class TextComponent extends AppComponent {
     elemProps.style = Object.assign(this.getDefaultStyle() || {}, {
       color: this.getPropertyData('color') || 'black',
     });
+      //Filter out unwanted props
+      const {
+          componentData,
+          isDragging,
+          canAcceptDrop,
+          hasChildren,
+          getComponent,
+          getComponentType,
+          getComponentPropertyData,
+          setPropertyData,
+          moveUI,
+          moveInto,
+          setHoverObject,
+          hoverObject,
+          ...props
+      } = elemProps;
     return (
-      <div className="node" {...elemProps}>
+      <div className="node" {...props}>
         {this.getPropertyData('size') === 'heading' && (
           <h1> {this.getPropertyData('text') || 'Default Text Content'} </h1>
         )}
