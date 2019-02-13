@@ -75,6 +75,11 @@ class TextComponent extends AppComponent {
     this.state = Object.assign(this.state, newState); // merge two states together, and dont lose any parent state properties.
   }
 
+  triggerGraphEvent = () => {
+    const graphId = this.getPropertyData('event');
+    this.getElementProps().onEvent(graphId)
+  }
+
   renderContent() {
     const elemProps = this.getElementProps();
     elemProps.style = Object.assign(this.getDefaultStyle() || {}, {
@@ -101,14 +106,20 @@ class TextComponent extends AppComponent {
     return (
       <div className="node" {...props}>
         {this.getPropertyData('size') === 'heading' && (
-          <h1> {this.getPropertyData('text') || 'Default Text Content'} </h1>
+          <h1 
+            onMouseOver={this.triggerGraphEvent}
+          > {this.getPropertyData('text') || 'Default Text Content'} </h1>
         )}
         {this.getPropertyData('size') === 'subheading' && (
-          <h3> {this.getPropertyData('text') || 'Default Text Content'} </h3>
+          <h3
+            onMouseOver={this.triggerGraphEvent}
+          > {this.getPropertyData('text') || 'Default Text Content'} </h3>
         )}
         {(this.getPropertyData('size') === 'normal' ||
           !this.getPropertyData('size')) && (
-          <p> {this.getPropertyData('text') || 'Default Text Content'} </p>
+          <p
+            onMouseOver={this.triggerGraphEvent}
+          > {this.getPropertyData('text') || 'Default Text Content'} </p>
         )}
       </div>
     );
