@@ -54,8 +54,15 @@ class TextComponent extends AppComponent {
           categoryDescription: 'Events for the text component',
           properties: [
             {
-              id: 'event',
-              name: 'Events',
+              id: 'load',
+              name: 'Load Event',
+              type: 'graph',
+              options: {},
+              data: null,
+            },
+            {
+              id: 'hover',
+              name: 'Hover Event',
               type: 'graph',
               options: {},
               data: null,
@@ -75,8 +82,12 @@ class TextComponent extends AppComponent {
     this.state = Object.assign(this.state, newState); // merge two states together, and dont lose any parent state properties.
   }
 
-  triggerGraphEvent = () => {
-    const graphId = this.getPropertyData('event');
+  componentDidMount() {
+    this.triggerGraphEvent('load')
+  }
+
+  triggerGraphEvent = (eventId) => {
+    const graphId = this.getPropertyData(eventId);
     this.getElementProps().onEvent(graphId)
   }
 
@@ -107,18 +118,18 @@ class TextComponent extends AppComponent {
       <div className="node" {...props}>
         {this.getPropertyData('size') === 'heading' && (
           <h1 
-            onMouseOver={this.triggerGraphEvent}
+            onMouseOver={() => this.triggerGraphEvent('hover')}
           > {this.getPropertyData('text') || 'Default Text Content'} </h1>
         )}
         {this.getPropertyData('size') === 'subheading' && (
           <h3
-            onMouseOver={this.triggerGraphEvent}
+            onMouseOver={() => this.triggerGraphEvent('hover')}
           > {this.getPropertyData('text') || 'Default Text Content'} </h3>
         )}
         {(this.getPropertyData('size') === 'normal' ||
           !this.getPropertyData('size')) && (
           <p
-            onMouseOver={this.triggerGraphEvent}
+            onMouseOver={() => this.triggerGraphEvent('hover')}
           > {this.getPropertyData('text') || 'Default Text Content'} </p>
         )}
       </div>
