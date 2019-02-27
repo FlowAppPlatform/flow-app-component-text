@@ -47,6 +47,28 @@ class TextComponent extends AppComponent {
               },
               data: null,
             },
+            {
+              id: 'align',
+              name: 'Align Text',
+              type: 'dropdown', 
+              options: {
+                options: [
+                  {
+                    label: 'Left',
+                    value: 'left'
+                  },
+                  {
+                    label: 'Right',
+                    value: 'right'
+                  },
+                  {
+                    label: 'Center',
+                    value: 'center'
+                  }
+                ]
+              },
+              data: null,
+            },
           ],
         },
         {
@@ -117,7 +139,17 @@ class TextComponent extends AppComponent {
           ...props
       } = elemProps;
     return (
-      <div className="node" {...props}>
+      <div 
+        className="node"
+        style={
+          {
+            textAlign: this.getPropertyData('align') 
+              ? this.getPropertyData('align').value 
+              : 'center'
+          }
+        }
+        {...props}
+      >
         {this.getPropertyData('size') === 'heading' && (
           <h1 
             onMouseOver={() => this.triggerGraphEvent('hover')}
