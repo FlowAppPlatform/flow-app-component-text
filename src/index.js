@@ -5,6 +5,15 @@ import AppComponent from 'flow-app-component';
 // Text Canvas Styles
 import './style.css';
 
+// Programmatically generated styles
+import {
+  alignContainer, 
+  containerWidth,
+  aligntext,
+  textMarginVertical,
+  textMarginPosition
+} from './style';
+
 class TextComponent extends AppComponent {
   constructor() {
     super();
@@ -48,26 +57,70 @@ class TextComponent extends AppComponent {
               data: null,
             },
             {
-              id: 'align',
+              id: 'align-container',
+              name: 'Align Container',
+              type: 'dropdown', 
+              options: {
+                options: [
+                  { label: 'Left', value: 'left' },
+                  { label: 'Right', value: 'right' },
+                  { label: 'Center', value: 'center' }
+                ]
+              },
+              data: null,
+            },
+            {
+              id: 'container-width',
+              name: 'Width',
+              type: 'dropdown',
+              options: {
+                options: [
+                  { label: 'Full', value: 'full' },
+                  { label: 'Half Page', value: 'half-page' },
+                  { label: 'Normal', value: 'normal'}
+                ]
+              },
+              data: null,
+            },
+            {
+              id: 'align-text',
               name: 'Align Text',
               type: 'dropdown', 
               options: {
                 options: [
-                  {
-                    label: 'Left',
-                    value: 'left'
-                  },
-                  {
-                    label: 'Right',
-                    value: 'right'
-                  },
-                  {
-                    label: 'Center',
-                    value: 'center'
-                  }
+                  { label: 'Left', value: 'left' },
+                  { label: 'Right', value: 'right' },
+                  { label: 'Center', value: 'center' }
                 ]
               },
               data: null,
+            },
+            {
+              id: 'text-margin-vertical',
+              name: 'Vertical Margin',
+              type: 'dropdown',
+              options: {
+                options: [
+                  { label: 'Default', value: 'default' },
+                  { label: 'Small', value: 'small' },
+                  { label: 'Normal', value: 'normal' },
+                  { label: 'Large', value: 'large' },
+                ]
+              },
+              data: null
+            },
+            {
+              id: 'text-margin-vertical-position',
+              name: 'Margin Position',
+              type: 'dropdown',
+              options: {
+                options: [
+                  { label: 'Top', value: 'top' },
+                  { label: 'Bottom', value: 'bottom' },
+                  { label: 'Both', value: 'both' }
+                ]
+              },
+              data: null
             },
           ],
         },
@@ -115,10 +168,27 @@ class TextComponent extends AppComponent {
     }
   }
 
+  computeTextStyling = () => {
+    let marginSize = this.getPropertyData('text-margin-vertical') 
+      ? textMarginVertical(this.getPropertyData('text-margin-vertical').value)
+      : 10
+    return {
+      ...this.getPropertyData('text-margin-vertical-position')
+        && textMarginPosition(this.getPropertyData('text-margin-vertical-position').value, marginSize)
+    }
+  }
+
   renderContent() {
     const elemProps = this.getElementProps();
     elemProps.style = Object.assign(this.getDefaultStyle() || {}, {
       color: this.getPropertyData('color') || 'black',
+      ...this.getPropertyData('align-container') 
+        && alignContainer(this.getPropertyData('align-container').value),
+      ...this.getPropertyData('container-width')
+        && containerWidth(this.getPropertyData('container-width').value),
+      ...this.getPropertyData('align-text')
+        && aligntext(this.getPropertyData('align-text').value),
+      ...this.computeTextStyling()
     });
       //Filter out unwanted props
       const {
@@ -141,26 +211,19 @@ class TextComponent extends AppComponent {
     return (
       <div 
         className="node"
-        style={
-          {
-            textAlign: this.getPropertyData('align') 
-              ? this.getPropertyData('align').value 
-              : 'center'
-          }
-        }
         {...props}
       >
-        {this.getPropertyData('size') === 'heading' && (
-          <h1 
+        {(this.getPropertyData('size') && this.getPropertyData('size').value === 'heading') && (
+          <h1
             onMouseOver={() => this.triggerGraphEvent('hover')}
           > {this.getPropertyData('text') || 'Default Text Content'} </h1>
         )}
-        {this.getPropertyData('size') === 'subheading' && (
+        {(this.getPropertyData('size') && this.getPropertyData('size').value === 'subheading') && (
           <h3
             onMouseOver={() => this.triggerGraphEvent('hover')}
           > {this.getPropertyData('text') || 'Default Text Content'} </h3>
         )}
-        {(this.getPropertyData('size') === 'normal' ||
+        {((this.getPropertyData('size') && this.getPropertyData('size').value === 'normal') ||
           !this.getPropertyData('size')) && (
           <p
             onMouseOver={() => this.triggerGraphEvent('hover')}
