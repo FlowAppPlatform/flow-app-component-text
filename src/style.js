@@ -1,10 +1,9 @@
 export const alignContainer = option => {
-  let style = {
-    marginRight: 'auto'
-  }
   switch (option) {
     case 'left':
-      return style
+      return {
+        marginRight: 'auto'
+      }
     case 'right':
       return {
         marginLeft: 'auto'
@@ -17,20 +16,47 @@ export const alignContainer = option => {
 }
 
 export const containerWidth = option => {
-  let style = {
-    minWidth: 20
-  };
   switch (option) {
-    case 'full':
+    case 'ten':
       return {
-        width: '100%'
+        width: '10%'
       }
-    case 'half-page':
+    case 'twenty':
+      return {
+        width: '20%'
+      }
+    case 'thirty':
+      return {
+        width: '30%'
+      };
+      case 'forty':
+      return {
+        width: '40%'
+      }
+    case 'fifty':
       return {
         width: '50%'
       }
-    case 'normal':
-      return style;
+    case 'sixty':
+      return {
+        width: '60%'
+      };
+      case 'seventy':
+      return {
+        width: '70%'
+      }
+    case 'eighty':
+      return {
+        width: '80%'
+      }
+    case 'ninety':
+      return {
+        width: '90%'
+      };
+    case 'full-page':
+      return {
+        width: '100%'
+      }
   }
 }
 
@@ -68,3 +94,11 @@ export const textMarginPosition = (option, size) => {
       }
   }
 }
+
+export const displayType = option => ({
+  display: option
+})
+
+export const alignVertical = option => ({
+  verticalAlign: option
+})

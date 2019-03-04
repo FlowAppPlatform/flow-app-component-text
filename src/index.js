@@ -11,7 +11,9 @@ import {
   containerWidth,
   aligntext,
   textMarginVertical,
-  textMarginPosition
+  textMarginPosition,
+  displayType,
+  alignVertical
 } from './style';
 
 class TextComponent extends AppComponent {
@@ -75,9 +77,28 @@ class TextComponent extends AppComponent {
               type: 'dropdown',
               options: {
                 options: [
-                  { label: 'Full', value: 'full' },
-                  { label: 'Half Page', value: 'half-page' },
-                  { label: 'Normal', value: 'normal'}
+                  { label: '10%', value: 'ten' },
+                  { label: '20%', value: 'twenty' },
+                  { label: '30%', value: 'thirty'},
+                  { label: '40%', value: 'forty' },
+                  { label: '50%', value: 'fifty' },
+                  { label: '60%', value: 'sixty'},
+                  { label: '70%', value: 'seventy' },
+                  { label: '80%', value: 'eighty' },
+                  { label: '90%', value: 'ninety'},
+                  { label: '100%', value: 'full-page'}
+                ]
+              },
+              data: null,
+            },
+            {
+              id: 'display-type',
+              name: 'Display Type',
+              type: 'dropdown',
+              options: {
+                options: [
+                  { label: 'Inline', value: 'inline-block' },
+                  { label: 'Block', value: 'block' },
                 ]
               },
               data: null,
@@ -85,15 +106,22 @@ class TextComponent extends AppComponent {
             {
               id: 'align-text',
               name: 'Align Text',
-              type: 'dropdown', 
+              type: 'align-text', 
+              options: ['left', 'right', 'center', 'justify'],
+              data: null,
+            },
+            {
+              id: 'vertical-align',
+              name: 'Vertical Align',
+              type: 'dropdown',
               options: {
                 options: [
-                  { label: 'Left', value: 'left' },
-                  { label: 'Right', value: 'right' },
-                  { label: 'Center', value: 'center' }
+                  { label: 'Top', value: 'top' },
+                  { label: 'Middle', value: 'middle' },
+                  { label: 'Bottom', value: 'bottom' },
                 ]
               },
-              data: null,
+              data: null
             },
             {
               id: 'text-margin-vertical',
@@ -180,15 +208,24 @@ class TextComponent extends AppComponent {
 
   renderContent() {
     const elemProps = this.getElementProps();
+    const defaultDisplay = { display: 'block' }
+    const defaultWidth = { width: '20%' };
+    const defaultVerticalAlign = { verticalAlign: 'top' }
+
+    console.log('alignText', this.getPropertyData('align-text'))
     elemProps.style = Object.assign(this.getDefaultStyle() || {}, {
       color: this.getPropertyData('color') || 'black',
       ...this.getPropertyData('align-container') 
         && alignContainer(this.getPropertyData('align-container').value),
       ...this.getPropertyData('container-width')
-        && containerWidth(this.getPropertyData('container-width').value),
+        && containerWidth(this.getPropertyData('container-width').value) || defaultWidth,
       ...this.getPropertyData('align-text')
-        && aligntext(this.getPropertyData('align-text').value),
-      ...this.computeTextStyling()
+        && aligntext(this.getPropertyData('align-text')),
+      ...this.computeTextStyling(),
+      ...this.getPropertyData('display-type')
+        && displayType(this.getPropertyData('display-type').value) || defaultDisplay,
+      ...this.getPropertyData('vertical-align')
+        && alignVertical(this.getPropertyData('vertical-align').value) || defaultVerticalAlign,
     });
       //Filter out unwanted props
       const {
@@ -226,6 +263,7 @@ class TextComponent extends AppComponent {
         {((this.getPropertyData('size') && this.getPropertyData('size').value === 'normal') ||
           !this.getPropertyData('size')) && (
           <p
+          style={{minWidth: 'inherit'}}
             onMouseOver={() => this.triggerGraphEvent('hover')}
           > {this.getPropertyData('text') || 'Default Text Content'} </p>
         )}

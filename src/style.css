@@ -2,7 +2,13 @@
     padding: 10px;
     box-shadow: 0 1px 3px rgba(0,0,0,.2);
     position: relative;
-    /* margin-bottom: 5px; */
+    display: inline-block;
+    overflow-x: auto; /* Use horizontal scroller if needed */
+    white-space: pre-wrap; /*css-3 */
+    white-space: -moz-pre-wrap !important; /*Mozilla, since 1999*/
+    word-wrap: break-word; /*Internet Explorer 5.5+*/
+    white-space : normal;
+    margin-bottom: 5px;
 }
 
 .node:hover, .node[data-selected="true"] {
