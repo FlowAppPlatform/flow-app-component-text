@@ -61,14 +61,8 @@ class TextComponent extends AppComponent {
             {
               id: 'align-container',
               name: 'Align Container',
-              type: 'dropdown', 
-              options: {
-                options: [
-                  { label: 'Left', value: 'left' },
-                  { label: 'Right', value: 'right' },
-                  { label: 'Center', value: 'center' }
-                ]
-              },
+              type: 'position', 
+              options: ['left', 'center', 'right'],
               data: null,
             },
             {
@@ -93,12 +87,12 @@ class TextComponent extends AppComponent {
             },
             {
               id: 'display-type',
-              name: 'Display Type',
+              name: 'Component Orientation',
               type: 'dropdown',
               options: {
                 options: [
-                  { label: 'Inline', value: 'inline-block' },
-                  { label: 'Block', value: 'block' },
+                  { label: 'Horizontal', value: 'inline-block' },
+                  { label: 'Vertical', value: 'block' },
                 ]
               },
               data: null,
@@ -209,14 +203,14 @@ class TextComponent extends AppComponent {
   renderContent() {
     const elemProps = this.getElementProps();
     const defaultDisplay = { display: 'block' }
-    const defaultWidth = { width: '20%' };
+    const defaultWidth = { width: '100%' };
     const defaultVerticalAlign = { verticalAlign: 'top' }
 
-    console.log('alignText', this.getPropertyData('align-text'))
+    console.log('align container', this.getPropertyData('align-container'))
     elemProps.style = Object.assign(this.getDefaultStyle() || {}, {
       color: this.getPropertyData('color') || 'black',
       ...this.getPropertyData('align-container') 
-        && alignContainer(this.getPropertyData('align-container').value),
+        && alignContainer(this.getPropertyData('align-container')),
       ...this.getPropertyData('container-width')
         && containerWidth(this.getPropertyData('container-width').value) || defaultWidth,
       ...this.getPropertyData('align-text')
