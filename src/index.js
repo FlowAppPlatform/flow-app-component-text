@@ -28,7 +28,7 @@ class TextComponent extends AppComponent {
             {
               id: 'text',
               name: 'Text',
-              type: 'text',
+              type: 'description',
               options: {},
               data: null,
             },
