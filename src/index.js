@@ -206,7 +206,6 @@ class TextComponent extends AppComponent {
     const defaultWidth = { width: '100%' };
     const defaultVerticalAlign = { verticalAlign: 'top' }
 
-    console.log('align container', this.getPropertyData('align-container'))
     elemProps.style = Object.assign(this.getDefaultStyle() || {}, {
       color: this.getPropertyData('color') || 'black',
       ...this.getPropertyData('align-container') 
