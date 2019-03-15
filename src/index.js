@@ -12,7 +12,6 @@ import {
   aligntext,
   textMarginVertical,
   textMarginPosition,
-  displayType,
   alignVertical
 } from './style';
 
@@ -81,18 +80,6 @@ class TextComponent extends AppComponent {
                   { label: '80%', value: 'eighty' },
                   { label: '90%', value: 'ninety'},
                   { label: '100%', value: 'full-page'}
-                ]
-              },
-              data: null,
-            },
-            {
-              id: 'display-type',
-              name: 'Component Orientation',
-              type: 'dropdown',
-              options: {
-                options: [
-                  { label: 'Horizontal', value: 'inline-block' },
-                  { label: 'Vertical', value: 'block' },
                 ]
               },
               data: null,
@@ -186,7 +173,7 @@ class TextComponent extends AppComponent {
   triggerGraphEvent = (eventId) => {
     const graphId = this.getPropertyData(eventId);
     if (typeof this.getElementProps().onEvent === 'function') {
-      this.getElementProps().onEvent(graphId)
+      this.getElementProps().onEvent(graphId);
     }
   }
 
@@ -202,9 +189,8 @@ class TextComponent extends AppComponent {
 
   renderContent() {
     const elemProps = this.getElementProps();
-    const defaultDisplay = { display: 'block' }
     const defaultWidth = { width: '100%' };
-    const defaultVerticalAlign = { verticalAlign: 'top' }
+    const defaultVerticalAlign = { verticalAlign: 'top' };
 
     elemProps.style = Object.assign(this.getDefaultStyle() || {}, {
       color: this.getPropertyData('color') || 'black',
@@ -215,8 +201,6 @@ class TextComponent extends AppComponent {
       ...this.getPropertyData('align-text')
         && aligntext(this.getPropertyData('align-text')),
       ...this.computeTextStyling(),
-      ...this.getPropertyData('display-type')
-        && displayType(this.getPropertyData('display-type').value) || defaultDisplay,
       ...this.getPropertyData('vertical-align')
         && alignVertical(this.getPropertyData('vertical-align').value) || defaultVerticalAlign,
     });

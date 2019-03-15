@@ -95,10 +95,6 @@ export const textMarginPosition = (option, size) => {
   }
 }
 
-export const displayType = option => ({
-  display: option
-})
-
 export const alignVertical = option => ({
   verticalAlign: option
 })
