@@ -5,6 +5,16 @@ import AppComponent from 'flow-app-component';
 // Text Canvas Styles
 import './style.css';
 
+// Programmatically generated styles
+import {
+  alignContainer, 
+  containerWidth,
+  aligntext,
+  textMarginVertical,
+  textMarginPosition,
+  alignVertical
+} from './style';
+
 class TextComponent extends AppComponent {
   constructor() {
     super();
@@ -17,7 +27,7 @@ class TextComponent extends AppComponent {
             {
               id: 'text',
               name: 'Text',
-              type: 'text',
+              type: 'description',
               options: {},
               data: null,
             },
@@ -47,6 +57,80 @@ class TextComponent extends AppComponent {
               },
               data: null,
             },
+            {
+              id: 'align-container',
+              name: 'Align Container',
+              type: 'position', 
+              options: ['left', 'center', 'right'],
+              data: null,
+            },
+            {
+              id: 'container-width',
+              name: 'Width',
+              type: 'dropdown',
+              options: {
+                options: [
+                  { label: '10%', value: 'ten' },
+                  { label: '20%', value: 'twenty' },
+                  { label: '30%', value: 'thirty'},
+                  { label: '40%', value: 'forty' },
+                  { label: '50%', value: 'fifty' },
+                  { label: '60%', value: 'sixty'},
+                  { label: '70%', value: 'seventy' },
+                  { label: '80%', value: 'eighty' },
+                  { label: '90%', value: 'ninety'},
+                  { label: '100%', value: 'full-page'}
+                ]
+              },
+              data: null,
+            },
+            {
+              id: 'align-text',
+              name: 'Align Text',
+              type: 'align-text', 
+              options: ['left', 'right', 'center', 'justify'],
+              data: null,
+            },
+            {
+              id: 'vertical-align',
+              name: 'Vertical Align',
+              type: 'dropdown',
+              options: {
+                options: [
+                  { label: 'Top', value: 'top' },
+                  { label: 'Middle', value: 'middle' },
+                  { label: 'Bottom', value: 'bottom' },
+                ]
+              },
+              data: null
+            },
+            {
+              id: 'text-margin-vertical',
+              name: 'Vertical Margin',
+              type: 'dropdown',
+              options: {
+                options: [
+                  { label: 'Default', value: 'default' },
+                  { label: 'Small', value: 'small' },
+                  { label: 'Normal', value: 'normal' },
+                  { label: 'Large', value: 'large' },
+                ]
+              },
+              data: null
+            },
+            {
+              id: 'text-margin-vertical-position',
+              name: 'Margin Position',
+              type: 'dropdown',
+              options: {
+                options: [
+                  { label: 'Top', value: 'top' },
+                  { label: 'Bottom', value: 'bottom' },
+                  { label: 'Both', value: 'both' }
+                ]
+              },
+              data: null
+            },
           ],
         },
         {
@@ -54,8 +138,15 @@ class TextComponent extends AppComponent {
           categoryDescription: 'Events for the text component',
           properties: [
             {
-              id: 'event',
-              name: 'Events',
+              id: 'load',
+              name: 'Load Event',
+              type: 'graph',
+              options: {},
+              data: null,
+            },
+            {
+              id: 'hover',
+              name: 'Hover Event',
               type: 'graph',
               options: {},
               data: null,
@@ -75,10 +166,43 @@ class TextComponent extends AppComponent {
     this.state = Object.assign(this.state, newState); // merge two states together, and dont lose any parent state properties.
   }
 
+  componentDidMount() {
+    this.triggerGraphEvent('load')
+  }
+
+  triggerGraphEvent = (eventId) => {
+    const graphId = this.getPropertyData(eventId);
+    if (typeof this.getElementProps().onEvent === 'function') {
+      this.getElementProps().onEvent(graphId);
+    }
+  }
+
+  computeTextStyling = () => {
+    let marginSize = this.getPropertyData('text-margin-vertical') 
+      ? textMarginVertical(this.getPropertyData('text-margin-vertical').value)
+      : 10
+    return {
+      ...this.getPropertyData('text-margin-vertical-position')
+        && textMarginPosition(this.getPropertyData('text-margin-vertical-position').value, marginSize)
+    }
+  }
+
   renderContent() {
     const elemProps = this.getElementProps();
+    const defaultWidth = { width: '100%' };
+    const defaultVerticalAlign = { verticalAlign: 'top' };
+
     elemProps.style = Object.assign(this.getDefaultStyle() || {}, {
       color: this.getPropertyData('color') || 'black',
+      ...this.getPropertyData('align-container') 
+        && alignContainer(this.getPropertyData('align-container')),
+      ...this.getPropertyData('container-width')
+        && containerWidth(this.getPropertyData('container-width').value) || defaultWidth,
+      ...this.getPropertyData('align-text')
+        && aligntext(this.getPropertyData('align-text')),
+      ...this.computeTextStyling(),
+      ...this.getPropertyData('vertical-align')
+        && alignVertical(this.getPropertyData('vertical-align').value) || defaultVerticalAlign,
     });
       //Filter out unwanted props
       const {
@@ -99,16 +223,26 @@ class TextComponent extends AppComponent {
           ...props
       } = elemProps;
     return (
-      <div className="node" {...props}>
-        {this.getPropertyData('size') === 'heading' && (
-          <h1> {this.getPropertyData('text') || 'Default Text Content'} </h1>
+      <div 
+        className="node"
+        {...props}
+      >
+        {(this.getPropertyData('size') && this.getPropertyData('size').value === 'heading') && (
+          <h1
+            onMouseOver={() => this.triggerGraphEvent('hover')}
+          > {this.getPropertyData('text') || 'Default Text Content'} </h1>
         )}
-        {this.getPropertyData('size') === 'subheading' && (
-          <h3> {this.getPropertyData('text') || 'Default Text Content'} </h3>
+        {(this.getPropertyData('size') && this.getPropertyData('size').value === 'subheading') && (
+          <h3
+            onMouseOver={() => this.triggerGraphEvent('hover')}
+          > {this.getPropertyData('text') || 'Default Text Content'} </h3>
         )}
-        {(this.getPropertyData('size') === 'normal' ||
+        {((this.getPropertyData('size') && this.getPropertyData('size').value === 'normal') ||
           !this.getPropertyData('size')) && (
-          <p> {this.getPropertyData('text') || 'Default Text Content'} </p>
+          <p
+          style={{minWidth: 'inherit'}}
+            onMouseOver={() => this.triggerGraphEvent('hover')}
+          > {this.getPropertyData('text') || 'Default Text Content'} </p>
         )}
       </div>
     );
